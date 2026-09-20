@@ -94,15 +94,30 @@ SpotBugs or JaCoCo, and no shared git hooks - `_standards/apply.py` skips it
 deliberately, because two hook managers fighting over `core.hooksPath` in one
 repository is a guaranteed bad time. What runs instead:
 
-| Gate | Tool | Runs at |
+| Gate | Tool | Enforces |
 |---|---|---|
-| Secrets | gitleaks | CI |
-| Formatting | `prettier --check` | CI |
-| Tests | vitest | CI |
-| Build | `ng build` | CI |
+| Secrets | gitleaks | no credential in the tree |
+| Formatting | prettier | `npm run format:check` |
+| Lint | eslint, type-aware | `npm run lint` |
+| Tests | vitest | `npm test` |
+| Build | `ng build` | compiles under `strict` and `strictTemplates` |
 
-Formatting is enforced in CI rather than at commit time. Run `npx prettier
---write .` before pushing, or wire up husky.
+All four run in CI, none at commit time. Run them yourself before pushing:
+
+    npm run format:check && npm run lint && npm test && npm run build
+
+`npm run format` and `npm run lint:fix` fix most of what the first two report.
+
+The lint is **type-aware** (`projectService` in `eslint.config.mjs`), which is
+what makes `no-floating-promises` and `no-misused-promises` possible - an
+unawaited promise loses its rejection, so the request fails, nothing is logged
+and the UI simply never updates. Those need the type checker, not just the
+syntax tree, which is why lint runs after `npm install` rather than standalone.
+
+`tsconfig.json` turns on `strict`, `noUncheckedIndexedAccess` and
+`strictTemplates`, none of which `ng new` generated. `strictTemplates` is the
+Angular half: without it a template can pass a string to a `number` input and
+the build says nothing.
 
 ## Licence
 

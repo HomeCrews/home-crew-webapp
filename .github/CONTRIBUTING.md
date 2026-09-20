@@ -6,10 +6,26 @@ blocking git hooks rather than discovered in CI.
 
 ## Before you start
 
-Nothing to install. There is no build and no hook set in this repository.
+Two things, once per clone.
 
-If you are also working in the twelve service repositories, install gitleaks
-anyway - their pre-commit hook requires it and fails loudly without it.
+**1. Node 24.** `package.json` declares `engines.node >= 24`, and the Dockerfile
+and CI both use it. An older Node fails somewhere inside the Angular build
+rather than telling you the version is wrong.
+
+    node --version
+    # nvm: nvm use     (reads .nvmrc)
+
+**2. Dependencies.**
+
+    npm install
+
+There is no `package-lock.json` yet, so this resolves fresh every time and is
+not reproducible. See the lockfile section in README.md - closing that gap needs
+a machine that can reach the public npm registry.
+
+No git hooks to install: this repository is in `apply.py`'s `HOOKS_OPT_OUT`, so
+`core.hooksPath` is unset. If you also work in the twelve service repositories,
+install gitleaks anyway - their pre-commit hook requires it.
 
     brew install gitleaks
 
@@ -61,16 +77,21 @@ commit does, not what you did.
 
 ## The local gate
 
-There is none. This repository is in `apply.py`'s `HOOKS_OPT_OUT`, so
-`core.hooksPath` is unset and no hook runs at commit or push time.
+No git hook runs here. This repository is in `apply.py`'s `HOOKS_OPT_OUT`, so
+`core.hooksPath` is unset and nothing checks a commit or a push locally - the
+branch-name and Conventional Commits rules are conventions here, not gates.
 
-That means the branch-name check, the Conventional Commits check and the
-gitleaks scan are all conventions here rather than gates. Follow them anyway -
-the sections above still apply, and a reviewer will hold you to them. The
-difference is that nothing will stop you first.
+The gates are real, they just run in CI. Run the same four before you push and
+you will not be surprised by the pull request:
 
-If you want the checks locally without installing the shared hooks, run
-gitleaks by hand before you push:
+    npm run format:check     # prettier
+    npm run lint             # eslint, type-aware
+    npm test                 # vitest
+    npm run build            # ng build
+
+`npm run lint:fix` and `npm run format` fix most of what the first two report.
+
+CI also runs gitleaks over the whole tree. Nothing runs it for you locally:
 
     gitleaks git --staged --redact --no-banner
 
@@ -106,18 +127,21 @@ into docker-compose works locally and then fails on deploy.
 
 ## Notes
 
-- **Nothing checks this repository before a push.** No formatter, no secret
-  scan, no branch-name check. The conventions above are conventions here, not
-  gates. Read your own diff.
+- **Nothing checks this repository before a push.** No hook runs locally. CI is
+  the gate, so a red pull request is the first feedback unless you run the four
+  commands above yourself.
 
-- **`.editorconfig` and `.gitattributes` are generated.** They come from
-  `_standards/templates/` and the next `apply.py` run overwrites them. Change
-  the template, not the copy.
+- **There is no `package-lock.json`.** Builds are not reproducible and CI cannot
+  cache npm downloads. `Dockerfile` and CI use `npm install` rather than
+  `npm ci`, which would fail without a lockfile. README.md has the steps to fix
+  it and why it needs a machine on the public registry.
 
-- **These community files are generated too.** `README.md` is seeded once and
-  then yours to edit. Everything else under `.github/` except `workflows/`
-  comes from `_standards/templates/github/` and is overwritten on every
-  `add-github-meta.py` run.
+- **`.editorconfig` and `.gitattributes` come from `_standards/templates/`**,
+  but `apply.py` skips this repository, so edits here are not overwritten.
+
+- **These community files are generated.** Everything under `.github/` except
+  `workflows/` comes from `_standards/templates/github/` and is overwritten on
+  every `add-github-meta.py` run. Change the template, not the copy.
 
 ## Code of conduct
 

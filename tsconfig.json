@@ -3,6 +3,31 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    /*
+      strict was NOT in the generated file. It is the umbrella that turns on
+      strictNullChecks, noImplicitAny, strictFunctionTypes and the rest, and
+      without it the individual flags below cover only a fraction of what they
+      look like they cover. Added here before there is any code to migrate -
+      retrofitting it onto a real app is a large, unrewarding diff.
+    */
+    "strict": true,
+
+    /* Dead code is a review cost and a source of confusion. Cheap to keep out
+       from the start; the linter's no-unused-vars catches the same thing in
+       editors that do not run tsc. */
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+
+    /* obj[key] is T | undefined rather than T. Verbose, and the single most
+       effective guard against a runtime "cannot read property of undefined"
+       once this app starts handling API responses. */
+    "noUncheckedIndexedAccess": true,
+
+    /* macOS and Windows have case-insensitive filesystems, Linux CI does not.
+       Without this, an import that differs only in case works locally and
+       fails in the Docker build. */
+    "forceConsistentCasingInFileNames": true,
+
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
@@ -17,7 +42,23 @@
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
-    "strictInputAccessModifiers": true
+    "strictInputAccessModifiers": true,
+
+    /*
+      strictTemplates was also missing, and it is the Angular half of "strict".
+      Without it a template can pass a string to a number @Input, or call a
+      method that does not exist, and the build says nothing - the error only
+      appears at runtime as an empty or broken component.
+    */
+    "strictTemplates": true,
+
+    /* Same checking for host bindings, which strictTemplates alone does not
+       cover. */
+    "typeCheckHostBindings": true,
+
+    /* Every component in this app is standalone; this makes an accidental
+       NgModule-based one a compile error rather than a surprise later. */
+    "strictStandalone": true
   },
   "files": [],
   "references": [

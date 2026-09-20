@@ -44,7 +44,12 @@ jobs:
         run: npm install --no-audit --no-fund
 
       - name: Check formatting
-        run: npx prettier --check .
+        run: npm run format:check
+
+      # Type-aware lint, so it needs the TypeScript project to resolve - which
+      # is why it runs after install rather than as a standalone job.
+      - name: Lint
+        run: npm run lint
 
       - name: Test
         run: npm test
