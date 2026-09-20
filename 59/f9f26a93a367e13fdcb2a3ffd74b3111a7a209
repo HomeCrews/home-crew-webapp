@@ -1,0 +1,23 @@
+src/app/app.config.ts
+  s_8f1ee334861e7f::t_61cbbdbb015622 1
+src/app/app.routes.ts
+  s_8f1ee334861e7f::t_61cbbdbb015622 1
+src/app/app.ts
+  s_8f1ee334861e7f::t_61cbbdbb015622 1,10
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "59f9f26a93a367e13fdcb2a3ffd74b3111a7a209",
+  "prompts": {},
+  "sessions": {
+    "s_8f1ee334861e7f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7b36985b-ae1d-4fa4-a365-e2432c2c80b9",
+        "model": "claude-opus-5"
+      },
+      "human_author": "mThanuj <mullagurithanuj0@gmail.com>"
+    }
+  }
+}
