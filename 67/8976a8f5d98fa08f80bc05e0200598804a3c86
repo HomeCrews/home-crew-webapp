@@ -1,0 +1,72 @@
+src/main.ts
+  s_8f1ee334861e7f::t_e6d7770d595814 5
+  s_8f1ee334861e7f::t_712ca1cc611d42 1-4
+README.md
+  s_8f1ee334861e7f::t_9b93ec4c87c4fd 60,91,96
+  s_8f1ee334861e7f::t_372cf638e003d6 3-4,7-8,14-19,21,23,25,27-29,31-33,35,37-38,40,42-43,45-59,61-65,67,69-74,76-78,80,82-85,87-90,92-95,97,99-105
+.prettierignore
+  s_8f1ee334861e7f::t_e6d7770d595814 1-28
+src/app/app.config.ts
+  s_8f1ee334861e7f::t_e6d7770d595814 6
+  s_8f1ee334861e7f::t_f9897d80c62766 1-5,7
+src/index.html
+  s_8f1ee334861e7f::t_e6d7770d595814 3-12
+  s_8f1ee334861e7f::t_d71403c1cee680 1-2,13
+nginx.conf
+  s_8f1ee334861e7f::t_37ee98e6978e1c 1-30
+angular.json
+  s_8f1ee334861e7f::t_37ee98e6978e1c 23
+  s_8f1ee334861e7f::t_60e84f5126082b 1-22,24-79
+Dockerfile
+  s_8f1ee334861e7f::t_37ee98e6978e1c 1-40
+.editorconfig
+  s_8f1ee334861e7f::t_cd9a28a93b6686 36-39
+.github/workflows/ci.yml
+  s_8f1ee334861e7f::t_8e5f6188238369 1-120
+.gitignore
+  s_8f1ee334861e7f::t_a8e93fc6d1655b 1-44
+.npmrc
+  s_8f1ee334861e7f::t_c9527b496fb5b4 1-19
+.prettierrc
+  s_8f1ee334861e7f::t_09101921d55325 1-12
+.vscode/extensions.json
+  s_8f1ee334861e7f::t_2318de935a08df 1-4
+.vscode/launch.json
+  s_8f1ee334861e7f::t_71941236a323f9 1-20
+.vscode/tasks.json
+  s_8f1ee334861e7f::t_221248b95ae744 1-42
+package.json
+  s_8f1ee334861e7f::t_594a1adb065ed9 1-32
+src/app/app.html
+  s_8f1ee334861e7f::t_3b61304dbb1d68 1-5
+src/app/app.routes.ts
+  s_8f1ee334861e7f::t_cccc075f954dea 1-3
+src/app/app.spec.ts
+  s_8f1ee334861e7f::t_1cb7ff1946fa38 1-22
+src/app/app.ts
+  s_8f1ee334861e7f::t_c85709bdf86a28 1-12
+src/styles.scss
+  s_8f1ee334861e7f::t_2d34e5bd870799 1
+tsconfig.app.json
+  s_8f1ee334861e7f::t_3a2b9ac4970483 1-14
+tsconfig.json
+  s_8f1ee334861e7f::t_4c308c89e23233 1-31
+tsconfig.spec.json
+  s_8f1ee334861e7f::t_22129229874198 1-14
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "678976a8f5d98fa08f80bc05e0200598804a3c86",
+  "prompts": {},
+  "sessions": {
+    "s_8f1ee334861e7f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7b36985b-ae1d-4fa4-a365-e2432c2c80b9",
+        "model": "claude-opus-5"
+      },
+      "human_author": "mThanuj <mullagurithanuj0@gmail.com>"
+    }
+  }
+}
