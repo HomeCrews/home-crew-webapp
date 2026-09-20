@@ -1,0 +1,34 @@
+.nvmrc
+  s_8f1ee334861e7f::t_b581a355565202 1
+eslint.config.mjs
+  s_8f1ee334861e7f::t_b581a355565202 1-89,91-103
+  s_8f1ee334861e7f::t_68833199419a06 90
+tsconfig.json
+  s_8f1ee334861e7f::t_e644732358d9f1 6-30,45-61
+.github/workflows/ci.yml
+  s_8f1ee334861e7f::t_51c348797b8d80 47-52
+package.json
+  s_8f1ee334861e7f::t_29221bb6b609c4 9-13,31-33,37,39-42,44
+.github/CONTRIBUTING.md
+  s_8f1ee334861e7f::t_4c680445034bf8 9,11-28,80-85,87-90,92-94,130-137,139-140,142-144
+.github/PULL_REQUEST_TEMPLATE.md
+  s_8f1ee334861e7f::t_9e64337d3505ed 14-26,30-32,34-37,43-50,62-63,65-72,80-92
+README.md
+  s_8f1ee334861e7f::t_3d7a4340f9761c 97,99-103,105-120
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "ec8868cb6b83196cb5cf986b0c1f787b7ce71d85",
+  "prompts": {},
+  "sessions": {
+    "s_8f1ee334861e7f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7b36985b-ae1d-4fa4-a365-e2432c2c80b9",
+        "model": "claude-opus-5"
+      },
+      "human_author": "mThanuj <mullagurithanuj0@gmail.com>"
+    }
+  }
+}
