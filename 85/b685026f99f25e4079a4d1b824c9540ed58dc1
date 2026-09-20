@@ -1,0 +1,27 @@
+.github/CONTRIBUTING.md
+  s_8f1ee334861e7f::t_a8a49251111ff8 100
+.github/ISSUE_TEMPLATE/config.yml
+  s_8f1ee334861e7f::t_952f931480d815 7,11
+.github/PULL_REQUEST_TEMPLATE.md
+  s_8f1ee334861e7f::t_12e312cb91f64f 1,77,80,82,84-85,87-88,90
+.github/workflows/ci.yml
+  s_8f1ee334861e7f::t_1f933d75130e08 3-4,9,13
+README.md
+  s_8f1ee334861e7f::t_fc07c1c8cee2b4 20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "85b685026f99f25e4079a4d1b824c9540ed58dc1",
+  "prompts": {},
+  "sessions": {
+    "s_8f1ee334861e7f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7b36985b-ae1d-4fa4-a365-e2432c2c80b9",
+        "model": "claude-opus-5"
+      },
+      "human_author": "mThanuj <mullagurithanuj0@gmail.com>"
+    }
+  }
+}
