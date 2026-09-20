@@ -33,3 +33,7 @@ indent_style = tab
 [*.cmd]
 # Matches .gitattributes: Windows scripts keep CRLF.
 end_of_line = crlf
+
+# Angular toolchain: prettier and the Angular CLI both use 2 spaces.
+[*.{ts,html,scss}]
+indent_size = 2

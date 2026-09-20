@@ -1,84 +1,108 @@
 # home-crew-webapp
 
-The web frontend for HomeCrew. Not yet scaffolded.
+The web frontend for HomeCrew. An Angular application, served as static files
+by nginx.
 
 One of fifteen repositories that make up HomeCrew, a home-services marketplace
-built as a Spring Boot microservice system. This one is a placeholder: it
-currently holds `.editorconfig`, `.gitattributes` and these community files,
-and nothing else.
+built as a Spring Boot microservice system. This one is the only repository
+that is not a JVM project.
 
 ## At a glance
 
 | | |
 |---|---|
-| Stack | Node, not yet chosen |
-| Talks to | the API gateway on 8080 |
+| Stack | Angular 22, TypeScript, SCSS |
+| Talks to | the API gateway on 8080, from the browser |
+| Served by | nginx, from `dist/webapp/browser` |
+| Local URL | http://localhost:4200 |
+| Image | `mthanuj/homecrew-webapp:dev` |
+| Compose service | `webapp` |
 | Default branch | `main` |
-| Build | none yet |
+| Tests | vitest, via `ng test` |
 
-## What it will be
+## Running it
 
-A single-page frontend against the gateway. Every route the backend exposes
-goes through `http://localhost:8080`:
+With the rest of the stack, which is the easy way:
 
-    /users/**          /auth/**          /admin/**
-    /bookings/**       /workers/**       /notifications/**
-    /payments/**       /xp/**            /assignments/**
+    cd ../home-crew-infrastructure
+    cp .env.example .env
+    ./dev up
 
-Bring the backend up from
-[home-crew-infrastructure](https://github.com/HomeCrews/home-crew-infrastructure)
-before working here:
+That runs the dev server in a container with your checkout bind-mounted, so a
+save rebuilds and the browser reloads. `node_modules` lives in a named volume
+rather than in your checkout, so the first start is slow and later ones are not.
 
-    docker compose up -d
-    curl http://localhost:8080/actuator/health
+On its own, if you have Node 24 and a reachable npm registry:
 
-## Why the shared hooks are not installed here
+    npm install
+    npm start
 
-The other twelve repositories share a POSIX `sh` hook set installed at
-`core.hooksPath` by Maven. This repository will use husky, driven by its own
-Node toolchain, and two hook managers fighting over `core.hooksPath` in one
-repository is a guaranteed bad time. `apply.py` lists it in `HOOKS_OPT_OUT` so
-that `--include-non-maven` cannot reinstate what was deliberately removed.
+## The lockfile
 
-The conventions still apply - branch names, Conventional Commits, no secrets.
-Nothing enforces them here yet. See
-[CONTRIBUTING.md](.github/CONTRIBUTING.md).
+**There is no `package-lock.json` yet, and that is a known gap rather than a
+choice.** Until one is committed:
+
+- `Dockerfile` and CI both use `npm install`, not `npm ci`. `npm ci` requires a
+  lockfile and exits non-zero without one.
+- Builds are not reproducible. Two builds a week apart can resolve different
+  patch versions.
+- CI cannot cache npm downloads; `actions/setup-node`'s `cache: npm` also
+  requires a lockfile.
+
+To close it, on a machine that can reach the public registry:
+
+    npm install --registry=https://registry.npmjs.org/
+    grep -c 'registry.npmjs.org' package-lock.json      # should be most lines
+    grep 'resolved' package-lock.json | grep -v 'registry.npmjs.org'   # expect none
+
+then commit it and switch `npm install` to `npm ci` in `Dockerfile` and
+`.github/workflows/ci.yml`, and add `cache: npm` to the setup-node step.
+
+The check matters: `.npmrc` in this repo pins the public registry, but a
+project-level `.npmrc` does **not** override `NPM_CONFIG_REGISTRY` in the
+environment. On a machine that sets it to a private mirror, every `resolved`
+URL in the lockfile records that mirror's hostname - which both leaks an
+internal address and produces a lockfile nobody else can install from.
+
+## Layout
+
+    src/app/app.ts         root component
+    src/app/app.html       root template
+    src/app/app.routes.ts  routes (empty)
+    src/app/app.config.ts  providers
+    public/                static assets copied verbatim
+    nginx.conf             SPA fallback and cache headers for the built image
+
+`angular.json` pins `outputPath` to `dist/webapp` rather than leaving it to be
+derived from the project name, because `Dockerfile` copies from
+`dist/webapp/browser` and a rename would otherwise move it silently.
+
+## Deployment
+
+A push to `dev` builds the image, pushes `mthanuj/homecrew-webapp:dev` and a
+`sha-<short>` tag to Docker Hub, then fires a `repository_dispatch` at
+home-crew-infrastructure, which pulls and restarts the container on the Hetzner
+dev host.
+
+A push to `main` publishes `:latest` and stops there - `deploy.yml` rejects any
+tag but `dev`.
 
 ## Quality gates
 
-This repository is deliberately outside the shared git hooks. There is no
-Maven build here, so the Spotless, Checkstyle, SpotBugs and JaCoCo gates that
-guard the twelve service repositories have nothing to bind to, and
-`apply.py`'s `HOOKS_OPT_OUT` skips it.
+Unlike the twelve Java repositories, this one has no Spotless, Checkstyle,
+SpotBugs or JaCoCo, and no shared git hooks - `_standards/apply.py` skips it
+deliberately, because two hook managers fighting over `core.hooksPath` in one
+repository is a guaranteed bad time. What runs instead:
 
-The practical consequence is worth stating plainly: **nothing checks this
-repository before a push.** No formatter, no secret scan, no branch-name
-check. Review the diff yourself.
-
-`.editorconfig` and `.gitattributes` are still generated from
-`_standards/templates/`. Everything else here is hand-written.
-
-## Related repositories
-
-HomeCrew is fifteen repositories. The ones you are most likely to need next:
-
-| Repository | What it is | Port |
+| Gate | Tool | Runs at |
 |---|---|---|
-| [home-crew-infrastructure](https://github.com/HomeCrews/home-crew-infrastructure) | docker compose topology and the Hetzner deploy | - |
-| [home-crew-config](https://github.com/HomeCrews/home-crew-config) | shared configuration, served by config-server | - |
-| [home-crew-service-discovery](https://github.com/HomeCrews/home-crew-service-discovery) | Eureka registry | 8761 |
-| [home-crew-config-server](https://github.com/HomeCrews/home-crew-config-server) | Spring Cloud Config server | 8888 |
-| [home-crew-api-gateway](https://github.com/HomeCrews/home-crew-api-gateway) | single entry point, routes to everything below | 8080 |
-| [home-crew-user-service](https://github.com/HomeCrews/home-crew-user-service) | `/users/**` | 8081 |
-| [home-crew-auth-service](https://github.com/HomeCrews/home-crew-auth-service) | `/auth/**` | 8082 |
-| [home-crew-admin-service](https://github.com/HomeCrews/home-crew-admin-service) | `/admin/**` | 8083 |
-| [home-crew-booking-service](https://github.com/HomeCrews/home-crew-booking-service) | `/bookings/**` | 8084 |
-| [home-crew-worker-service](https://github.com/HomeCrews/home-crew-worker-service) | `/workers/**` | 8085 |
-| [home-crew-notification-service](https://github.com/HomeCrews/home-crew-notification-service) | `/notifications/**` | 8086 |
-| [home-crew-payment-service](https://github.com/HomeCrews/home-crew-payment-service) | `/payments/**` | 8087 |
-| [home-crew-xp-service](https://github.com/HomeCrews/home-crew-xp-service) | `/xp/**` | 8088 |
-| [home-crew-assignment-service](https://github.com/HomeCrews/home-crew-assignment-service) | `/assignments/**` | 8089 |
-| [home-crew-webapp](https://github.com/HomeCrews/home-crew-webapp) | web frontend, not yet scaffolded | - |
+| Secrets | gitleaks | CI |
+| Formatting | `prettier --check` | CI |
+| Tests | vitest | CI |
+| Build | `ng build` | CI |
+
+Formatting is enforced in CI rather than at commit time. Run `npx prettier
+--write .` before pushing, or wire up husky.
 
 ## Licence
 
