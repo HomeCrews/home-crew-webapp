@@ -97,7 +97,7 @@ CI also runs gitleaks over the whole tree. Nothing runs it for you locally:
 
 ## Opening a pull request
 
-Base the pull request on `main`.
+Base the pull request on `dev`.
 
 One logical change per pull request. A formatting sweep and a behaviour change
 in the same diff means the reviewer reads neither carefully.

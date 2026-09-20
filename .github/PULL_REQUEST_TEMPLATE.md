@@ -1,4 +1,4 @@
-<!-- Base branch should be `main`.
+<!-- Base branch should be `dev`.
 
      What changed and why belongs in the linked issue, not here. This
      template is the evidence that the change is ready to merge, not a
@@ -74,19 +74,17 @@ The same four gates CI runs, with nothing skipped:
 
 ## Before merge
 
-- [ ] Branch is up to date with `main` and the full gate was re-run
+- [ ] Branch is up to date with `dev` and the full gate was re-run
       after the rebase or merge
 
-<!-- A merge to `main` - this repository's default branch - builds and publishes
+<!-- A merge to `dev` - this repository's default branch - builds and publishes
 
-         mthanuj/homecrew-webapp:latest
+         mthanuj/homecrew-webapp:dev
 
-     and deploys nowhere. deploy.yml rejects any tag but `dev`.
+     then dispatches to home-crew-infrastructure, which pulls and restarts the
+     container on the Hetzner dev host automatically.
 
-     A push to `dev` publishes the `:dev` tag and dispatches to
-     home-crew-infrastructure, which pulls and restarts the container on the
-     Hetzner dev host.
+     A merge to `main` publishes the `:latest` tag and deploys nowhere -
+     deploy.yml rejects any tag but `dev`, and there is no production path yet.
 
-     Note the asymmetry with the twelve service repositories: their default
-     branch is `dev`, so their normal flow deploys. This one's default is
-     `main`, so the normal flow does not. -->
+     Same shape as the twelve service repositories. -->

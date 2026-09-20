@@ -1,17 +1,16 @@
 name: CI/CD
 
-# webapp's default branch is main, not dev - unlike the twelve service repos.
-# The deploy is still gated to the dev tag below, so a main push publishes
-# :latest and stops there, exactly as it does for a service pushed to main.
+# Same shape as the twelve service repositories: `dev` is the default branch and
+# the only one that deploys, `main` publishes :latest and stops there.
 on:
   push:
     branches:
-      - main
       - dev
+      - main
   pull_request:
     branches:
-      - main
       - dev
+      - main
 
 jobs:
   build:

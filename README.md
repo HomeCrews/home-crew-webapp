@@ -17,7 +17,7 @@ that is not a JVM project.
 | Local URL | http://localhost:4200 |
 | Image | `mthanuj/homecrew-webapp:dev` |
 | Compose service | `webapp` |
-| Default branch | `main` |
+| Default branch | `dev` |
 | Tests | vitest, via `ng test` |
 
 ## Running it
